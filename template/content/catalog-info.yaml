@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: S3-Creation
+  name: S3-Bucket
   annotations:
     github.com/project-slug: gangabadiger/s3-catalog # Change the value to your github repo which contains terraform code.
   title: 'S3 Creation' # you can give any title
