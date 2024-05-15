@@ -1,5 +1,5 @@
 {
-  "name": "${{ values.name }}",
+  "name": "S3-Bucket",
   "private": true,
   "dependencies": {}
 }
