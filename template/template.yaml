@@ -75,7 +75,7 @@ spec:
       name: Starting GitHub action
       action: github:actions:dispatch
       input:
-        workflowId:  s3bucket-workflow.yml # ID of GitHub action WorkFlow
+        workflowId:  s3bucket.yaml # ID of GitHub action WorkFlow
         repoUrl: 'github.com?repo=s3-catalog&owner=gangabadiger'
         branchOrTagName: 'master'
         workflowInputs:
