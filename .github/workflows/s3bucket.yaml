@@ -1,26 +1,23 @@
 # Define the name of the GitHub Action workflow
-name: Create an ec2 instance
+name: Create a s3 bucket
 # This workflow is manually triggered using the GitHub Actions UI
 on:
   workflow_dispatch:
     # Define inputs that are required for the manual trigger
     inputs:
-      instanceName:
-        description: 'Name of the AWS Instance'  # What's this input for?
+      bucketName:
+        description: 'Name of the S3 Bucket'  # What's this input for?
         required: true  # Is it optional or required?
-      awsRegion:
-        description: 'AWS Region for the instance'
-        required: true
-      instanceType:
-        description: 'AWS instance type'
+      bucketType:
+        description: 'S3 Bucket type'
         required: true
       action:
         description: 'Action to perform (apply/destroy)'
         required: true
 # Jobs to be executed in this workflow
 jobs:
-  # Job for applying the ec2 instance
-  apply_ec2:
+  # Job for applying the s3 bucket
+  apply_s3:
     # Use the latest Ubuntu runner
     runs-on: ubuntu-latest
     
@@ -59,11 +56,11 @@ jobs:
     # Apply the Terraform plan
     - name: Terraform vars
     - name: terraform apply
-      run: terraform apply -var instanceName=${{ github.event.inputs.instanceName }} -var awsRegion=${{ github.event.inputs.awsRegion }} -var instanceType=${{ github.event.inputs.instanceType }} -auto-approve
+      run: terraform apply -var bucketName=${{ github.event.inputs.bucketName }} -var bucketType=${{ github.event.inputs.bucketType }} -auto-approve
       working-directory: .
 
-  # Destroying the  ec2 instance
-  destroy_instance:
+  # Destroying the  s3 bucket
+  destroy_s3:
     runs-on: ubuntu-latest
     
     # Execute this job only if the action input is "destroy"
@@ -93,5 +90,5 @@ jobs:
     # Destroy all resources 
     - name: Terraform Destroy
     - name: terraform apply
-      run: terraform destroy -var instanceName=${{ github.event.inputs.instanceName }} -var awsRegion=${{ github.event.inputs.awsRegion }} -auto-approve
+      run: terraform destroy -var bucketName=${{ github.event.inputs.bucketName }} -auto-approve
       working-directory: .
