@@ -1,42 +1,34 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: create-ec2-instance
-  title: Create an EC2 Instance
-  description: Create an Instance to deploy your application
+  name: S3-Bucket
+  title: Create S3-Bucket
+  description: S3-Bucket Creation
   tags: ['recommended']
 spec:
   owner: guests
   type: service
   parameters:
-    - title: EC2 Instance Creation
+    - title: S3 Bucket Creation
       required:
-         - InstanceName
-         - Region
-         - InstanceType    
+         - BucketName
+         - BucketType  
       properties:
-        InstanceName:
-          title: Instance Name.
+        BucketName:
+          title: Bucket Name.
           type: string
-          description: Name of the Instnace to be created.
+          description: Name of the Bucket to be created.
           ui:autofocus: true
           ui:options:
             rows: 5
 
-        Region:
-          title:  AWS Region
+        BucketType:
+          title: Type of Bucket.
           type: string
-          description: Name of the region where you want to create your create-ec2-instance eg:- us-east-1, ap-south-1 etc.
-
-        InstanceType:
-          title: Type of Instance.
-          type: string
-          description: Type of the instance that you want to deploy, for eg:- t2.medium, t3.medium etc.
+          description: Type of the bucket that you want to create, for eg:- private, public.
           enum:
-            - t2.medium
-            - t2.small
-            - t2.micro
-            - t3.medium
+            - private
+            - public
         action:
           title: action
           type: string
@@ -65,7 +57,7 @@ spec:
       input:
         url: ./content  # Location of the content directory where catlog-info.yaml file is present for the template
         values:
-          name: ${{ parameters.InstanceName}}
+          name: ${{ parameters.BucketName}}
 
 # Publish the content of the current working directory to our github directory
     - id: publish
@@ -73,7 +65,7 @@ spec:
       action: publish:github
       input:
         allowedHosts: ['github.com']
-        description: This repo is to create an ec2 instance ${{ parameters.InstanceName }} using backstage.
+        description: This repo is to create a s3 bucket ${{ parameters.BucketName }} using backstage.
         repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: public # or 'internal' or 'private'
         # defaultBranch: master
@@ -83,13 +75,12 @@ spec:
       name: Starting GitHub action
       action: github:actions:dispatch
       input:
-        workflowId:  instance.yml # ID of GitHub action WorkFlow
-        repoUrl: 'github.com?repo=aws-ec2&owner=sagar0419'
+        workflowId:  s3bucket-workflow.yml # ID of GitHub action WorkFlow
+        repoUrl: 'github.com?repo=s3-catalog&owner=gangabadiger'
         branchOrTagName: 'master'
         workflowInputs:
-          instanceName: ${{ parameters.InstanceName }}
-          awsRegion: ${{ parameters.Region }}
-          instanceType: ${{ parameters.InstanceType }}
+          bukcetName: ${{ parameters.BucketName }}
+          bucketType: ${{ parameters.BucketType }}
           action: ${{ parameters.action }}
 
 # Registering new component in the catalog of backstage.
@@ -98,7 +89,7 @@ spec:
       action: catalog:register
       input:
         repoContentsUrl: ${{steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: '/component-info.yaml' # where the info of the catalog is stored.
+        catalogInfoPath: '/catalog-info.yaml' # where the info of the catalog is stored.
 
 # Output links  are displayed to the user after the template execution.
   output:
