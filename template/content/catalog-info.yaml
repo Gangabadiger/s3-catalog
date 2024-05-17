@@ -8,6 +8,6 @@ metadata:
   title: 'S3 Bucket Creation'
   description: An example of a S3 Creation.
 spec:
-  type: other
+  type: service
   lifecycle: experimental
   owner: user:guest
